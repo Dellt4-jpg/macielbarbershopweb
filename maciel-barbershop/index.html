@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Maciel Barbershop | Reservá tu turno online</title>
+  <meta name="description" content="Maciel Barbershop: peluquería masculina en Rubén Darío 846. Reservá tu turno online en menos de un minuto y comprá productos de barbería.">
+  <meta name="theme-color" content="#0b0b0d">
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Maciel Barbershop">
+  <meta property="og:description" content="Reservá tu turno online en Maciel Barbershop.">
+  <meta property="og:image" content="assets/logo.svg">
+  <meta name="twitter:card" content="summary">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&display=swap">
+  <style>
+/* Base compartida: variables, reset, botones, formularios, toasts, diálogos */
+:root {
+  --bg: #0b0b0d;
+  --surface: #151518;
+  --surface-2: #1c1c21;
+  --line: #2a2a31;
+  --text: #f5f5f6;
+  --muted: #9a9aa3;
+  --metal: #b8bcc4;
+  --metal-2: #8d929c;
+  --ok: #4ade80;
+  --warn: #fbbf24;
+  --danger: #f87171;
+  --radius: 14px;
+  --font-head: 'Barlow Condensed', 'Arial Narrow', Impact, sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --ease: cubic-bezier(.22, .7, .2, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--text);
+  font-family: var(--font-body); font-size: 16px; line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+img, svg { max-width: 100%; display: block; }
+a { color: inherit; }
+h1, h2, h3 { font-family: var(--font-head); text-transform: uppercase; letter-spacing: .04em; line-height: 1.05; margin: 0 0 .5em; }
+p { margin: 0 0 1em; }
+:focus-visible { outline: 2px solid var(--metal); outline-offset: 3px; }
+[hidden] { display: none !important; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Botones */
+.btn {
+  --btn-bg: var(--surface-2); --btn-fg: var(--text); --btn-bd: var(--line);
+  display: inline-flex; align-items: center; justify-content: center; gap: .55rem;
+  min-height: 48px; padding: .75rem 1.5rem; border-radius: 10px;
+  border: 1px solid var(--btn-bd); background: var(--btn-bg); color: var(--btn-fg);
+  font: 600 .95rem var(--font-body); letter-spacing: .08em; text-transform: uppercase; text-decoration: none;
+  cursor: pointer; transition: transform .25s var(--ease), background .25s, border-color .25s, box-shadow .25s;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn:hover { transform: translateY(-2px); border-color: var(--metal-2); }
+.btn:active { transform: translateY(0); }
+.btn--primary { --btn-bg: linear-gradient(135deg, #f1f2f4, #aeb2ba); --btn-fg: #0b0b0d; --btn-bd: transparent; }
+.btn--primary:hover { box-shadow: 0 10px 30px rgba(184,188,196,.25); border-color: transparent; }
+.btn--ghost { --btn-bg: transparent; --btn-bd: var(--metal-2); }
+.btn--ghost:hover { background: rgba(255,255,255,.06); }
+.btn--danger { --btn-fg: var(--danger); --btn-bd: rgba(248,113,113,.4); }
+.btn--ok { --btn-fg: #0b0b0d; --btn-bg: var(--ok); --btn-bd: transparent; }
+.btn--sm { min-height: 40px; padding: .45rem 1rem; font-size: .8rem; }
+.btn--block { width: 100%; }
+.btn[disabled], .btn[aria-disabled="true"] { opacity: .5; pointer-events: none; }
+.btn .spinner { width: 18px; height: 18px; }
+
+.spinner {
+  display: inline-block; width: 28px; height: 28px; border-radius: 50%;
+  border: 3px solid rgba(255,255,255,.2); border-top-color: var(--metal);
+  animation: spin .8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Formularios */
+.field { display: grid; gap: .4rem; margin-bottom: 1rem; }
+.field label { font-size: .85rem; color: var(--metal); letter-spacing: .04em; }
+.field .hint { font-size: .78rem; color: var(--muted); }
+.field .error { font-size: .82rem; color: var(--danger); min-height: 1em; }
+input[type=text], input[type=tel], input[type=email], input[type=password], input[type=number],
+input[type=date], input[type=time], input[type=url], select, textarea {
+  width: 100%; min-height: 50px; padding: .75rem 1rem; border-radius: 10px;
+  background: var(--surface-2); color: var(--text); border: 1px solid var(--line);
+  font: inherit; font-size: 16px; /* 16px evita el zoom en iOS */
+  transition: border-color .2s, box-shadow .2s;
+}
+textarea { min-height: 110px; resize: vertical; }
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--metal); box-shadow: 0 0 0 3px rgba(184,188,196,.15); }
+input[aria-invalid="true"] { border-color: var(--danger); }
+.check { display: flex; align-items: center; gap: .6rem; cursor: pointer; }
+.check input { width: 22px; height: 22px; accent-color: var(--metal); }
+
+/* Toasts */
+#toasts { position: fixed; left: 50%; bottom: 90px; transform: translateX(-50%); z-index: 1000; display: grid; gap: .5rem; width: min(92vw, 420px); pointer-events: none; }
+.toast {
+  padding: .85rem 1.1rem; border-radius: 12px; background: var(--surface-2); border: 1px solid var(--line);
+  box-shadow: 0 10px 40px rgba(0,0,0,.5); animation: toast-in .35s var(--ease); pointer-events: auto; font-size: .95rem;
+}
+.toast--ok { border-color: rgba(74,222,128,.5); }
+.toast--error { border-color: rgba(248,113,113,.6); }
+@keyframes toast-in { from { opacity: 0; transform: translateY(12px); } }
+
+/* Diálogo */
+dialog {
+  width: min(94vw, 560px); max-height: 92vh; padding: 0; border: 1px solid var(--line);
+  border-radius: 18px; background: var(--surface); color: var(--text); overflow: auto;
+}
+dialog::backdrop { background: rgba(0,0,0,.75); backdrop-filter: blur(4px); }
+dialog[open] { animation: dialog-in .3s var(--ease); }
+@keyframes dialog-in { from { opacity: 0; transform: translateY(16px) scale(.98); } }
+.dialog__body { padding: 1.5rem; }
+.dialog__head { display: flex; justify-content: space-between; align-items: start; gap: 1rem; }
+.dialog__close { background: none; border: 0; color: var(--muted); font-size: 1.8rem; line-height: 1; cursor: pointer; padding: .2rem .5rem; }
+
+/* Badges de estado */
+.badge { display: inline-block; padding: .25rem .65rem; border-radius: 999px; font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; font-weight: 600; border: 1px solid var(--line); color: var(--metal); white-space: nowrap; }
+.badge--pendiente_pago, .badge--pendiente_confirmacion { color: var(--warn); border-color: rgba(251,191,36,.4); }
+.badge--confirmada, .badge--entregada { color: var(--ok); border-color: rgba(74,222,128,.4); }
+.badge--cancelada { color: var(--danger); border-color: rgba(248,113,113,.4); }
+.badge--finalizada { color: var(--metal-2); }
+
+.empty { text-align: center; padding: 2.5rem 1rem; color: var(--muted); border: 1px dashed var(--line); border-radius: var(--radius); }
+.empty strong { display: block; color: var(--text); font-family: var(--font-head); font-size: 1.4rem; text-transform: uppercase; letter-spacing: .05em; margin-bottom: .3rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}
+
+/* Sitio público — mobile-first */
+.skip { position: absolute; left: -999px; top: 0; background: var(--text); color: #000; padding: .6rem 1rem; z-index: 2000; }
+.skip:focus { left: 0; }
+
+.wrap { width: min(1120px, 100% - 2.5rem); margin-inline: auto; }
+.wrap--narrow { width: min(720px, 100% - 2rem); }
+.center { text-align: center; }
+.muted { color: var(--muted); }
+.center-pad { display: grid; place-items: center; padding: 2rem; }
+.eyebrow { color: var(--metal-2); text-transform: uppercase; letter-spacing: .25em; font-size: .78rem; margin: 0 0 .6rem; }
+.logo-slot img { height: auto; }
+
+/* NAV */
+.nav { position: fixed; inset: 0 0 auto 0; z-index: 100; padding-top: env(safe-area-inset-top); transition: background .35s, border-color .35s, backdrop-filter .35s; border-bottom: 1px solid transparent; }
+.nav.is-solid { background: rgba(11,11,13,.88); backdrop-filter: blur(14px); border-color: var(--line); }
+.nav__inner { width: min(1120px, 100% - 2rem); margin-inline: auto; display: flex; align-items: center; justify-content: space-between; min-height: 64px; }
+.nav__brand { display: flex; align-items: center; gap: .7rem; text-decoration: none; }
+.nav__brand img { width: 38px; height: 38px; }
+.nav__name { font-family: var(--font-head); font-size: 1.25rem; letter-spacing: .12em; text-transform: uppercase; }
+.nav__toggle { width: 48px; height: 48px; background: none; border: 0; display: grid; place-content: center; gap: 6px; cursor: pointer; }
+.nav__toggle span { width: 26px; height: 2px; background: var(--text); transition: transform .3s var(--ease), opacity .2s; }
+.nav__toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+.nav__toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.nav__toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+.nav__menu { position: fixed; inset: 64px 0 auto 0; background: rgba(11,11,13,.97); display: grid; padding: .5rem 1.25rem 1.5rem; border-bottom: 1px solid var(--line); transform: translateY(-110%); visibility: hidden; transition: transform .4s var(--ease), visibility .4s; }
+.nav__menu.is-open { transform: none; visibility: visible; }
+.nav__menu a { text-decoration: none; padding: 1rem 0; border-bottom: 1px solid var(--line); text-transform: uppercase; letter-spacing: .14em; font-size: .9rem; color: var(--metal); }
+.nav__menu a:hover, .nav__menu a:focus-visible { color: var(--text); }
+
+/* HERO */
+.hero { position: relative; min-height: 100svh; display: grid; place-items: center; text-align: center; overflow: hidden; padding: 6rem 1.25rem 4rem; isolation: isolate; }
+.hero__bg { position: absolute; inset: 0; z-index: -2; background:
+  radial-gradient(ellipse at 50% 20%, #2a2a31 0%, transparent 60%),
+  repeating-linear-gradient(115deg, #0e0e11 0 2px, #121216 2px 14px);
+  background-size: cover; background-position: center; transform: scale(1.06); animation: hero-zoom 18s ease-out forwards; }
+.hero__shade { position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(11,11,13,.55) 0%, rgba(11,11,13,.75) 60%, var(--bg) 100%); }
+@keyframes hero-zoom { to { transform: scale(1); } }
+.hero__content { max-width: 760px; }
+.hero__logo img { width: clamp(96px, 26vw, 140px); margin: 0 auto 1.25rem; filter: drop-shadow(0 8px 30px rgba(184,188,196,.25)); animation: logo-in 1.1s var(--ease) both, float 6s ease-in-out 1.2s infinite; }
+@keyframes logo-in { from { opacity: 0; transform: translateY(20px) scale(.88) rotate(-4deg); } }
+@keyframes float { 50% { transform: translateY(-8px); } }
+.hero__title { font-size: clamp(2.6rem, 11vw, 5.5rem); letter-spacing: .1em; margin-bottom: .3em; animation: rise .9s var(--ease) .25s both; background: linear-gradient(180deg, #fff, #9a9ea8); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hero__tagline { font-size: clamp(1.05rem, 3.6vw, 1.35rem); color: var(--metal); max-width: 34ch; margin: 0 auto 2rem; animation: rise .9s var(--ease) .5s both; }
+.hero__cta { display: grid; gap: .8rem; max-width: 340px; margin: 0 auto; animation: rise .9s var(--ease) .75s both; }
+.hero__note { margin-top: 1.5rem; color: var(--muted); font-size: .9rem; }
+@keyframes rise { from { opacity: 0; transform: translateY(24px); } }
+.hero__scroll { position: absolute; bottom: 1.5rem; left: 50%; width: 26px; height: 42px; border: 2px solid var(--metal-2); border-radius: 14px; transform: translateX(-50%); opacity: .7; }
+.hero__scroll span { position: absolute; top: 8px; left: 50%; width: 4px; height: 8px; margin-left: -2px; background: var(--metal); border-radius: 2px; animation: scroll-dot 1.8s infinite; }
+@keyframes scroll-dot { 0% { opacity: 0; transform: translateY(0); } 40% { opacity: 1; } 100% { opacity: 0; transform: translateY(14px); } }
+
+/* SECCIONES */
+.section { padding: 4.5rem 0; }
+.section--alt { background: var(--surface); border-block: 1px solid var(--line); }
+.section__head { text-align: center; margin-bottom: 2rem; }
+.section__head h2 { font-size: clamp(2.2rem, 8vw, 3.4rem); }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 1.25rem; }
+.section--alt .card { background: var(--bg); }
+
+.reveal { opacity: 0; transform: translateY(26px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
+.reveal.is-in { opacity: 1; transform: none; }
+
+/* RESERVA */
+.steps { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: .35rem; margin: 0 0 1.25rem; padding: 0; counter-reset: s; }
+.steps li { text-align: center; font-size: .68rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); padding-top: .55rem; border-top: 3px solid var(--line); transition: color .3s, border-color .3s; }
+.steps li.is-done, .steps li.is-active { color: var(--text); border-color: var(--metal); }
+.step { border: 0; padding: 0; margin: 0 0 1.5rem; min-width: 0; animation: rise .5s var(--ease) both; }
+.step legend { font-family: var(--font-head); font-size: 1.35rem; letter-spacing: .06em; text-transform: uppercase; margin-bottom: .8rem; padding: 0; }
+.options { display: grid; gap: .6rem; }
+.option { display: flex; align-items: center; justify-content: space-between; gap: 1rem; width: 100%; text-align: left; min-height: 64px; padding: .9rem 1rem; border-radius: 12px; border: 1px solid var(--line); background: var(--surface-2); color: var(--text); font: inherit; cursor: pointer; transition: border-color .2s, background .2s, transform .2s; }
+.option:hover { border-color: var(--metal-2); }
+.option[aria-checked="true"] { border-color: var(--metal); background: #23232a; box-shadow: inset 0 0 0 1px var(--metal); }
+.option__name { font-weight: 600; display: block; }
+.option__meta { color: var(--muted); font-size: .85rem; }
+.option__price { font-family: var(--font-head); font-size: 1.5rem; white-space: nowrap; }
+.chips { display: flex; gap: .6rem; overflow-x: auto; padding-bottom: .5rem; scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch; }
+.chip { flex: 0 0 auto; scroll-snap-align: start; min-width: 84px; min-height: 64px; padding: .55rem .9rem; border-radius: 12px; border: 1px solid var(--line); background: var(--surface-2); color: var(--text); font: inherit; cursor: pointer; text-align: center; line-height: 1.2; transition: border-color .2s, background .2s; }
+.chip small { display: block; color: var(--muted); text-transform: capitalize; font-size: .75rem; }
+.chip strong { font-size: 1.15rem; }
+.chip:hover { border-color: var(--metal-2); }
+.chip[aria-checked="true"] { border-color: var(--metal); background: #23232a; box-shadow: inset 0 0 0 1px var(--metal); }
+.chips--time { flex-wrap: wrap; overflow: visible; }
+.chips--time .chip { min-width: 78px; min-height: 52px; font-weight: 600; font-size: 1.05rem; }
+.summary { padding: 1rem; border-radius: 12px; background: var(--surface-2); border: 1px solid var(--line); margin-bottom: 1rem; font-size: .95rem; }
+.summary dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: .3rem 1rem; }
+.summary dt { color: var(--muted); }
+.summary dd { margin: 0; text-align: right; font-weight: 500; }
+
+/* PAGO */
+.pay { display: grid; gap: 1.1rem; animation: rise .5s var(--ease) both; }
+.pay__ok { text-align: center; }
+.pay__ok h3 { font-size: 1.8rem; margin-bottom: .2rem; }
+.pay__amount { text-align: center; padding: 1.1rem; border-radius: 14px; background: var(--surface-2); border: 1px solid var(--line); }
+.pay__amount small { display: block; color: var(--muted); text-transform: uppercase; letter-spacing: .15em; font-size: .72rem; }
+.pay__amount strong { font-family: var(--font-head); font-size: 3rem; line-height: 1.1; }
+.alias { display: flex; gap: .6rem; align-items: center; justify-content: space-between; padding: .8rem 1rem; border: 1px dashed var(--metal-2); border-radius: 12px; }
+.alias code { font-size: 1.15rem; font-weight: 600; word-break: break-all; }
+.alias small { display: block; color: var(--muted); }
+.pay ol { margin: 0; padding-left: 1.2rem; color: var(--metal); }
+.pay ol li { margin-bottom: .35rem; }
+.notice { padding: .85rem 1rem; border-radius: 12px; font-size: .9rem; background: rgba(251,191,36,.08); border: 1px solid rgba(251,191,36,.35); color: #f6dd9b; }
+.notice--info { background: rgba(255,255,255,.04); border-color: var(--line); color: var(--metal); }
+
+/* GRID */
+.grid { display: grid; gap: 1rem; grid-template-columns: 1fr; }
+.svc { padding: 1.4rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg); display: grid; gap: .6rem; align-content: start; transition: transform .35s var(--ease), border-color .3s; }
+.svc:hover { transform: translateY(-4px); border-color: var(--metal-2); }
+.svc h3 { font-size: 1.6rem; margin: 0; }
+.svc p { color: var(--muted); margin: 0; }
+.svc__row { display: flex; align-items: baseline; justify-content: space-between; }
+.svc__price { font-family: var(--font-head); font-size: 2rem; }
+.prod { border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: var(--surface); display: flex; flex-direction: column; transition: transform .35s var(--ease), border-color .3s; }
+.prod:hover { transform: translateY(-4px); border-color: var(--metal-2); }
+.prod__img { aspect-ratio: 1; background: var(--surface-2) center/cover no-repeat; display: grid; place-items: center; color: var(--line); }
+.prod__img img { width: 100%; height: 100%; object-fit: cover; }
+.prod__img svg { width: 56px; opacity: .35; }
+.prod__body { padding: 1.1rem; display: grid; gap: .45rem; flex: 1; align-content: start; }
+.prod__body h3 { font-size: 1.4rem; margin: 0; }
+.prod__body p { color: var(--muted); font-size: .92rem; margin: 0; }
+.prod__foot { display: flex; align-items: center; justify-content: space-between; gap: .6rem; margin-top: .4rem; flex-wrap: wrap; }
+.prod__price { font-family: var(--font-head); font-size: 1.8rem; }
+.stock { font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; }
+.stock--ok { color: var(--ok); } .stock--low { color: var(--warn); } .stock--out { color: var(--danger); }
+
+.qty { display: inline-flex; align-items: center; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.qty button { width: 48px; height: 48px; background: var(--surface-2); color: var(--text); border: 0; font-size: 1.4rem; cursor: pointer; }
+.qty output { min-width: 52px; text-align: center; font-weight: 600; }
+
+/* UBICACIÓN */
+.big { font-size: 1.4rem; margin-bottom: 1rem; }
+.hours { margin-bottom: 1.4rem; display: grid; gap: .3rem; max-width: 340px; font-size: .95rem; }
+.hours div { display: flex; justify-content: space-between; gap: 1rem; border-bottom: 1px solid var(--line); padding: .35rem 0; }
+.hours span:first-child { color: var(--muted); }
+.map { border-radius: 18px; overflow: hidden; border: 1px solid var(--line); min-height: 300px; background: var(--surface-2); }
+.map iframe { width: 100%; height: 100%; min-height: 300px; border: 0; filter: grayscale(1) invert(.92) contrast(.9); }
+.contact { display: grid; gap: .8rem; max-width: 380px; margin: 0 auto; }
+
+.footer { text-align: center; padding: 2.5rem 1rem 6rem; color: var(--muted); font-size: .85rem; border-top: 1px solid var(--line); display: grid; gap: .5rem; justify-items: center; }
+.footer p { margin: 0; }
+
+.wa-float { position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); width: 60px; height: 60px; border-radius: 50%; display: grid; place-items: center; background: #25d366; color: #fff; z-index: 90; box-shadow: 0 8px 26px rgba(37,211,102,.4); transition: transform .3s var(--ease); animation: pop .6s var(--ease) 1.4s both; }
+.wa-float:hover { transform: scale(1.08); }
+@keyframes pop { from { opacity: 0; transform: scale(.4); } }
+
+@media (min-width: 720px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+  .grid--products { grid-template-columns: repeat(2, 1fr); }
+  .hero__cta { grid-auto-flow: column; max-width: none; justify-content: center; }
+  .card { padding: 2rem; }
+  .steps li { font-size: .75rem; }
+}
+@media (min-width: 960px) {
+  .nav__toggle { display: none; }
+  .nav__menu { position: static; display: flex; gap: 1.6rem; transform: none; visibility: visible; background: none; border: 0; padding: 0; }
+  .nav__menu a { border: 0; padding: .5rem 0; font-size: .8rem; }
+  .grid { grid-template-columns: repeat(3, 1fr); }
+  .grid--products { grid-template-columns: repeat(4, 1fr); }
+  .wrap--split { display: grid; grid-template-columns: 1fr 1.2fr; gap: 3rem; align-items: center; }
+  .section { padding: 6rem 0; }
+}
+@media (max-width: 959px) { .wrap--split .map { margin-top: 2rem; } }
+  </style>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"HairSalon","name":"Maciel Barbershop","address":{"@type":"PostalAddress","streetAddress":"Rubén Darío 846","addressCountry":"AR"},"sameAs":["https://www.instagram.com/maciel.barbershopp"]}
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js" defer></script>
+  <script type="module" src="js/public.js"></script>
+</head>
+<body>
+  <a class="skip" href="#reservar">Ir a reservar</a>
+
+  <!-- NAVEGACIÓN -->
+  <header class="nav" id="nav">
+    <div class="nav__inner">
+      <a href="#inicio" class="nav__brand" aria-label="Maciel Barbershop - Inicio">
+        <span class="js-logo logo-slot"><img src="assets/logo.svg" alt="Logo MB" width="40" height="40"></span>
+        <span class="nav__name" data-bind="business_name">Maciel Barbershop</span>
+      </a>
+      <button class="nav__toggle" id="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-menu"><span></span><span></span><span></span></button>
+      <nav class="nav__menu" id="nav-menu" aria-label="Principal">
+        <a href="#inicio">Inicio</a>
+        <a href="#reservar">Reservar turno</a>
+        <a href="#servicios">Servicios</a>
+        <a href="#productos">Productos</a>
+        <a href="#ubicacion">Ubicación</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- BIENVENIDA -->
+    <section class="hero" id="inicio">
+      <div class="hero__bg" id="hero-bg" aria-hidden="true"></div>
+      <div class="hero__shade" aria-hidden="true"></div>
+      <div class="hero__content">
+        <span class="js-logo logo-slot hero__logo"><img src="assets/logo.svg" alt="Logo MB" width="120" height="120"></span>
+        <h1 class="hero__title"><span data-bind="business_name">Maciel Barbershop</span></h1>
+        <p class="hero__tagline" data-bind="tagline">Tu mejor versión empieza en el sillón.</p>
+        <div class="hero__cta">
+          <a href="#reservar" class="btn btn--primary">Reservar turno</a>
+          <a href="#productos" class="btn btn--ghost">Ver productos</a>
+        </div>
+        <p class="hero__note" data-bind="opening_note" hidden></p>
+      </div>
+      <a href="#reservar" class="hero__scroll" aria-label="Bajar"><span></span></a>
+    </section>
+
+    <!-- RESERVAS -->
+    <section class="section" id="reservar">
+      <div class="wrap wrap--narrow">
+        <header class="section__head reveal">
+          <p class="eyebrow">En menos de un minuto</p>
+          <h2>Reservá tu turno</h2>
+        </header>
+
+        <div id="booking" class="card reveal">
+          <div id="booking-loading" class="center-pad"><span class="spinner"></span></div>
+          <div id="booking-empty" class="empty" hidden></div>
+
+          <form id="booking-form" novalidate hidden>
+            <ol class="steps" aria-label="Pasos de la reserva">
+              <li data-step="1">Servicio</li><li data-step="2">Día</li><li data-step="3">Horario</li><li data-step="4">Tus datos</li>
+            </ol>
+
+            <fieldset class="step" id="step-service">
+              <legend>1. Elegí el servicio</legend>
+              <div id="service-options" class="options"></div>
+            </fieldset>
+
+            <fieldset class="step" id="step-day" hidden>
+              <legend>2. Elegí el día</legend>
+              <div id="day-options" class="chips" role="radiogroup" aria-label="Días disponibles"></div>
+              <p id="day-empty" class="muted" hidden>No hay días disponibles por el momento. Escribinos por WhatsApp.</p>
+            </fieldset>
+
+            <fieldset class="step" id="step-time" hidden>
+              <legend>3. Elegí el horario</legend>
+              <div id="time-loading" class="center-pad" hidden><span class="spinner"></span></div>
+              <div id="time-options" class="chips chips--time" role="radiogroup" aria-label="Horarios disponibles"></div>
+              <p id="time-empty" class="muted" hidden>No quedan horarios para este día. Probá con otro día.</p>
+            </fieldset>
+
+            <fieldset class="step" id="step-data" hidden>
+              <legend>4. Tus datos</legend>
+              <div class="field">
+                <label for="b-name">Nombre y apellido</label>
+                <input id="b-name" name="name" type="text" autocomplete="name" placeholder="Ej: Juan Pérez" maxlength="80" required>
+                <span class="error" data-error-for="b-name"></span>
+              </div>
+              <div class="field">
+                <label for="b-phone">Teléfono / WhatsApp</label>
+                <input id="b-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="Ej: 351 123 4567" maxlength="20" required>
+                <span class="error" data-error-for="b-phone"></span>
+              </div>
+              <div id="booking-summary" class="summary"></div>
+              <button type="submit" class="btn btn--primary btn--block" id="booking-submit">Confirmar solicitud de reserva</button>
+            </fieldset>
+          </form>
+
+          <!-- Pago de seña -->
+          <div id="booking-payment" hidden></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICIOS -->
+    <section class="section section--alt" id="servicios">
+      <div class="wrap">
+        <header class="section__head reveal">
+          <p class="eyebrow">Lo que hacemos</p>
+          <h2>Servicios</h2>
+        </header>
+        <div id="services-list" class="grid"></div>
+      </div>
+    </section>
+
+    <!-- PRODUCTOS -->
+    <section class="section" id="productos">
+      <div class="wrap">
+        <header class="section__head reveal">
+          <p class="eyebrow">Llevate el estilo a casa</p>
+          <h2>Productos</h2>
+        </header>
+        <div id="products-list" class="grid grid--products"></div>
+      </div>
+    </section>
+
+    <!-- UBICACIÓN -->
+    <section class="section section--alt" id="ubicacion">
+      <div class="wrap wrap--split">
+        <div class="reveal">
+          <p class="eyebrow">Dónde estamos</p>
+          <h2>Ubicación</h2>
+          <p class="big"><span data-bind="address">Rubén Darío 846</span><span data-bind="city_suffix"></span></p>
+          <div id="hours-list" class="hours"></div>
+          <a id="maps-link" class="btn btn--primary" href="#" target="_blank" rel="noopener">Abrir en Google Maps</a>
+        </div>
+        <div class="map reveal" id="map-box"></div>
+      </div>
+    </section>
+
+    <!-- CONTACTO -->
+    <section class="section" id="contacto">
+      <div class="wrap wrap--narrow center">
+        <header class="section__head reveal">
+          <p class="eyebrow">Hablemos</p>
+          <h2>Contacto</h2>
+        </header>
+        <div class="contact reveal">
+          <a id="contact-wa" class="btn btn--primary" href="#" target="_blank" rel="noopener" hidden>Escribir por WhatsApp</a>
+          <a id="contact-ig" class="btn btn--ghost" href="#" target="_blank" rel="noopener">Instagram</a>
+          <a id="contact-tel" class="btn btn--ghost" href="#" hidden></a>
+          <a id="contact-mail" class="btn btn--ghost" href="#" hidden></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span class="js-logo logo-slot"><img src="assets/logo.svg" alt="" width="36" height="36"></span>
+    <p>© <span id="year"></span> <span data-bind="business_name">Maciel Barbershop</span> · <span data-bind="address">Rubén Darío 846</span></p>
+    <p><a id="footer-ig" href="#" target="_blank" rel="noopener">Instagram</a></p>
+  </footer>
+
+  <!-- Botón flotante de WhatsApp -->
+  <a id="wa-float" class="wa-float" href="#" target="_blank" rel="noopener" aria-label="Escribinos por WhatsApp" hidden>
+    <svg viewBox="0 0 32 32" width="30" height="30" fill="currentColor" aria-hidden="true"><path d="M16 3C9.4 3 4 8.300 4 14.800c0 2.300.7 4.500 1.900 6.300L4 28l7.100-1.800c1.700.9 3.600 1.400 5.600 1.400 6.600 0 12-5.300 12-11.800S22.600 3 16 3zm0 21.600c-1.800 0-3.500-.5-5-1.400l-.4-.2-4.200 1.100 1.100-4.100-.3-.4a9.600 9.600 0 0 1-1.500-5.200C5.700 9.700 10.300 5.400 16 5.400s10.300 4.300 10.300 9.600S21.700 24.600 16 24.600zm5.500-7.200c-.3-.2-1.800-.9-2.100-1s-.5-.2-.7.200-.8 1-1 1.200-.4.200-.7.100a8.100 8.100 0 0 1-4-3.500c-.3-.5.300-.5.900-1.600.1-.2 0-.4 0-.5l-1-2.300c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.100-.8.400s-1 1-1 2.400 1 2.800 1.200 3c.2.2 2.100 3.200 5.100 4.500 1.900.8 2.600.9 3.600.7.600-.1 1.800-.7 2-1.400s.2-1.300.2-1.400-.3-.2-.6-.4z"/></svg>
+  </a>
+
+  <!-- Diálogo de compra -->
+  <dialog id="shop-dialog" aria-labelledby="shop-title">
+    <div class="dialog__body" id="shop-body"></div>
+  </dialog>
+
+  <noscript><p style="padding:2rem;text-align:center">Necesitás activar JavaScript para reservar turnos online.</p></noscript>
+</body>
+</html>
